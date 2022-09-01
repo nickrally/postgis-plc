@@ -5,23 +5,27 @@ load_dotenv()
 
 conn = psycopg2.connect(os.environ['DATABASE_URL'])
 
-print("Opened database successfully")
-
-
-# Open a cursor to perform database operations
 cur = conn.cursor()
 
-query = "SELECT a.name as a_name, plc.name as plc_name, ST_Distance(a.geolocation, plc.geolocation) " \
-        "as distance FROM dessert_after_meal a, dessert_after_meal plc " \
-        "WHERE a.name='Bartaco' AND plc.name = 'Piece, Love, and Chocolate';"
+query1 = "SELECT name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal a, " \
+         "LATERAL (SELECT id, geolocation FROM dessert_after_meal " \
+         "WHERE name = 'Piece, Love, and Chocolate') AS plc " \
+         "WHERE a.id <> plc.id ORDER BY distance;"
 
-# Query the database and obtain data as Python objects
-cur.execute(query)
-print(cur.fetchall())
+cur.execute(query1)
 
-# Make the changes to the database persistent
-# conn.commit()
+message1 = "Dessert after dinner - distances between Piece, Love & Chocolate and three restaurants"
+print(f'{message1}\n{cur.fetchall()}')
 
-# Close communication with the database
+query2 = "SELECT name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal a, " \
+         "LATERAL (SELECT id, geolocation FROM dessert_after_meal " \
+         "WHERE name = 'Piece, Love, and Chocolate') AS plc " \
+         "WHERE a.id <> plc.id AND ST_Distance(a.geolocation, plc.geolocation) < 500 ORDER BY distance;"
+
+cur.execute(query2)
+
+message2 = "Dessert after dinner - which of the three restaurants is within 500 meters from Piece, Love & Chocolate?"
+print(f'{message2}\n{cur.fetchall()}')
+
 cur.close()
 conn.close()
