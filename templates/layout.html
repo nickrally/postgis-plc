@@ -1,0 +1,16 @@
+<!DOCUTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Dessert After Dinner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="p-2" style="background-color:rgba(53, 73, 48, 0.21)">
+        <img src="/static/images/Logow.png" height="150">
+    </div>
+{% include 'includes/_navbar.html' %}
+{% block body %}{% endblock %}
+</body>
+</html>

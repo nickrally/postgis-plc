@@ -1,0 +1,29 @@
+form {
+  margin: 10px;
+}
+
+.inputName{
+width: 65%;
+margin: 4px;
+}
+
+.inputStreetAddress{
+width: 65%;
+margin: 4px;
+}
+
+.inputCity{
+width: 50%;
+margin: 4px;
+}
+
+.inputZip{
+width: 10%;
+margin: 4px;
+}
+
+.inputState{
+width: 5%;
+margin: 4px;
+}
+

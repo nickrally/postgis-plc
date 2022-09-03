@@ -1,31 +1,36 @@
-import os
-import psycopg2
-from dotenv import load_dotenv
-load_dotenv()
+from flask import Flask, request, render_template
+from wtforms import Form, StringField,  Field, validators
+from wtforms.validators import InputRequired, Length
+from flask_wtf import FlaskForm
 
-conn = psycopg2.connect(os.environ['DATABASE_URL'])
+app = Flask(__name__)
+app.secret_key = b'ZsbK\x9fdD|`\x07\x05\x01\x95\x93u\xae'
 
-cur = conn.cursor()
+class AddressForm(FlaskForm):
+    name     = StringField('name')
+    street_address = StringField('street_address')
+    city    = StringField('city')
+    state = StringField('state')
+    zipcode = StringField('zipcode', validators=[InputRequired(),
+                                            Length(5)])
 
-query1 = "SELECT name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal a, " \
-         "LATERAL (SELECT id, geolocation FROM dessert_after_meal " \
-         "WHERE name = 'Piece, Love, and Chocolate') AS plc " \
-         "WHERE a.id <> plc.id ORDER BY distance;"
 
-cur.execute(query1)
+# @app.route('/')
+# def index():
+#     return render_template('home.html')
 
-message1 = "Dessert after dinner - distances between Piece, Love & Chocolate and three restaurants"
-print(f'{message1}\n{cur.fetchall()}')
+@app.route('/', methods=['GET','POST'])
+def index():
+    form = AddressForm(request.form)
+    if request.method == 'POST' and form.validate():
+        return render_template('home.html')
+    return render_template('home.html', form=form)
 
-query2 = "SELECT name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal a, " \
-         "LATERAL (SELECT id, geolocation FROM dessert_after_meal " \
-         "WHERE name = 'Piece, Love, and Chocolate') AS plc " \
-         "WHERE a.id <> plc.id AND ST_Distance(a.geolocation, plc.geolocation) < 500 ORDER BY distance;"
 
-cur.execute(query2)
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
-message2 = "Dessert after dinner - which of the three restaurants is within 500 meters from Piece, Love & Chocolate?"
-print(f'{message2}\n{cur.fetchall()}')
 
-cur.close()
-conn.close()
+if __name__ == "__main__":
+    app.run(debug=True)
