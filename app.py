@@ -51,14 +51,15 @@ def index():
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
+    form = PlaceForm(request.form)
     if request.method == 'POST':
-        place = Place(request.form['name'], request.form['street_address'], request.form['city'],
-                         request.form['state'], request.form['zip'])
+        place = Place(form['name'].data, form['street_address'].data, form['city'].data,
+                         form['state'].data, form['zip'].data)
 
         db.session.add(place)
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template('add.html')
+    return render_template('add.html', form=form)
 
 
 @app.route('/edit/<string:id>', methods=['GET','POST'], endpoint='edit')
