@@ -1,28 +1,33 @@
 ## My first postGIS project: dessert after dinner
+
 ### Create a table in a database with postgis extension:
+
 ```buildoutcfg
 plc_test=# CREATE TABLE dessert_after_meal (
-    id SERIAL PRIMARY KEY, name TEXT NOT NULL, 
-    street_address TEXT NOT NULL, 
-    city TEXT NOT NULL, 
-    state TEXT NOT NULL, 
+    id SERIAL PRIMARY KEY, name TEXT NOT NULL,
+    street_address TEXT NOT NULL,
+    city TEXT NOT NULL,
+    state TEXT NOT NULL,
     zip TEXT NOT NULL
 );
 ```
+
 ### Insert initial data
+
 ```
-plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip) 
+plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip)
     VALUES ('Piece, Love, and Chocolate', '805 Pearl St.', 'Boulder', 'CO', '80302');
 
-plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip) 
+plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip)
     VALUES ('Roadhouse Boulder Depot', '2366 Junction Pl.', 'Boulder', 'CO', '80301');
 
-plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip) 
+plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip)
     VALUES ('Spruce Farm and Fish', '2115 13th St.', 'Boulder', 'CO', '80302');
 
-plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip) 
+plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip)
     VALUES ('Bartaco', '1048 Pearl St.', 'Boulder', 'CO', '80302');
 ```
+
 ### Get latitude and longitude using Bing Maps Api with free apikey
 
 ```buildoutcfg
@@ -66,6 +71,7 @@ plc % python3
 ```buildoutcfg
 plc_test=# ALTER TABLE dessert_after_meal ADD COLUMN geolocation GEOGRAPHY(POINT);
 ```
+
 ### Update rows
 
 ```buildoutcfg
@@ -74,16 +80,14 @@ plc_test=# UPDATE dessert_after_meal SET geolocation = 'point(-105.251041 40.024
 plc_test=# UPDATE dessert_after_meal SET geolocation = 'point(-105.279445 40.019434)'  WHERE id=3;
 plc_test=# UPDATE dessert_after_meal SET geolocation = 'point(-105.28182 40.017207)'  WHERE id=4;
 ```
-### Use LATERAL JOIN to iterate over restaurant rows to calculate distance to the chocolate shop
+
+### Iterate over restaurant rows to calculate distance to the chocolate shop
 
 ```buildoutcfg
-plc_test=# SELECT name, ST_Distance(a.geolocation, plc.geolocation) 
-    AS distance FROM dessert_after_meal a, 
-    LATERAL (SELECT id, geolocation FROM dessert_after_meal 
-    WHERE name = 'Piece, Love, and Chocolate') AS plc WHERE a.id <> plc.id 
-    ORDER BY distance;
+plc_test=# SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a JOIN dessert_after_meal AS plc ON a.id <> plc.id WHERE plc.name = 'Piece, Love, and Chocolate' ORDER BY distance;
 
-          name           |   distance    
+
+          name           |   distance
 -------------------------+---------------
  Bartaco                 |  252.23875067
  Spruce Farm and Fish    |  521.69999719
@@ -94,14 +98,9 @@ plc_test=# SELECT name, ST_Distance(a.geolocation, plc.geolocation)
 ### Find a restaurant within 500 meters (546 yards) from the chocolate shop
 
 ```buildoutcfg
-plc_test=# SELECT name, ST_Distance(a.geolocation, plc.geolocation) 
-    AS distance FROM dessert_after_meal a, 
-    LATERAL (SELECT id, geolocation FROM dessert_after_meal 
-    WHERE name = 'Piece, Love, and Chocolate') AS plc 
-    WHERE a.id <> plc.id AND ST_Distance(a.geolocation, plc.geolocation) < 500 
-    ORDER BY distance;
+plc_test=# SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a JOIN dessert_after_meal AS plc ON a.id <> plc.id WHERE plc.name = 'Piece, Love, and Chocolate' AND ST_Distance(a.geolocation, plc.geolocation) < 500 ORDER BY distance;
 
-  name   |   distance   
+  name   |   distance
 ---------+--------------
  Bartaco | 252.23875067
 (1 row)
