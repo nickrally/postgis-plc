@@ -9,7 +9,7 @@ from sqlalchemy import or_ , and_
 from sqlalchemy.exc import IntegrityError, DataError
 from dotenv import load_dotenv
 import geocoder
-from geoalchemy2.types import Geometry, Geography
+from geoalchemy2.types import Geometry, Geography, func
 
 load_dotenv()
 
@@ -110,6 +110,27 @@ def delete(id):
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('delete.html', place=place, id=id)
+
+
+# @app.route('/search')
+# def search():
+#     places = None
+#
+#     def searchTitle():
+#         txt = "%{}%".format(request.args.get('maxDistanceQuery'))
+#         return Place.title.ilike(txt)
+#
+#     max_distance_selected = request.args.get('maxDistanceQuery')
+#
+#     if max_distance_selected:
+#         query = Place.query.with_entities(Place, func.ST_Distance(Place.geolocation, coordinates_point).label(
+#             'distance')).order_by('distance')
+#         results = query.paginate(page, 10).items
+#         for result in results:
+#             event = result.Event
+#             distance = result.distance
+#             result_dict = event.to_dict()
+#             result_dict['distance'] = distance
 
 
 if __name__ == "__main__":
