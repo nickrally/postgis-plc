@@ -7,20 +7,19 @@ conn = psycopg2.connect(os.environ['DATABASE_URL'])
 
 cur = conn.cursor()
 
-query1 = "SELECT name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal a, " \
-         "LATERAL (SELECT id, geolocation FROM dessert_after_meal " \
-         "WHERE name = 'Piece, Love, and Chocolate') AS plc " \
-         "WHERE a.id <> plc.id ORDER BY distance;"
+query1 = "SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance \
+FROM dessert_after_meal AS a JOIN dessert_after_meal AS plc ON a.id <> plc.id \
+WHERE plc.name = 'Piece, Love, and Chocolate' ORDER BY distance;"
 
 cur.execute(query1)
 
 message1 = "Dessert after dinner - distances between Piece, Love & Chocolate and three restaurants"
 print(f'{message1}\n{cur.fetchall()}')
 
-query2 = "SELECT name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal a, " \
-         "LATERAL (SELECT id, geolocation FROM dessert_after_meal " \
-         "WHERE name = 'Piece, Love, and Chocolate') AS plc " \
-         "WHERE a.id <> plc.id AND ST_Distance(a.geolocation, plc.geolocation) < 500 ORDER BY distance;"
+query2 = "SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance \
+FROM dessert_after_meal AS a JOIN dessert_after_meal AS plc ON a.id <> plc.id \
+WHERE plc.name = 'Piece, Love, and Chocolate' \
+AND ST_Distance(a.geolocation, plc.geolocation) < 500 ORDER BY distance;"
 
 cur.execute(query2)
 
