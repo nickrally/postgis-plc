@@ -27,3 +27,10 @@ width: 5%;
 margin: 4px;
 }
 
+.search-label{
+  font-size:medium;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #8B0000;
+}
+
