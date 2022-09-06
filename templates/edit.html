@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class="container">
+        <div class="blog-header">
+            <h2 class="blog-title">Edit Place</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-8 blog-main">
+                <form method="POST" action="">
+                    {{ form.name.label }} {{ form.name(size=250, class_="form-control") }} <br/>
+                    {{ form.street_address.label }}  {{ form.street_address(rows="50",  class_="form-control", id="inputText") }} <br/>
+                    {{ form.city.label }} {{ form.city(class_="form-control") }} <br/>
+                    {{ form.state.label }} {{ form.state(class_="form-control") }} <br/>
+                    {{ form.zip.label }} {{ form.zip(class_="form-control") }} <br/>
+                    <div>
+                        <button type="submit" class="btn btn-primary search-btn">save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
