@@ -125,14 +125,16 @@ def delete(id):
 def search():
     max_distance = request.args.get('maxDistance')
     app.logger.info("MAX_DISTANCE %s" % max_distance)
-    sql = "SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a \
+    if (max_distance):
+        sql = "SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a \
         JOIN dessert_after_meal AS plc ON a.id <> plc.id \
         WHERE plc.name = 'Piece, Love, and Chocolate' \
         AND ST_Distance(a.geolocation, plc.geolocation) < %s ORDER BY distance;" % max_distance
-    result = db.session.execute(sql)
-    places = [row for row in result]
-    app.logger.info("PLACES %s" % places)
-    return render_template('results.html', places=places)
+        result = db.session.execute(sql)
+        places = [row for row in result]
+        app.logger.info("PLACES %s" % places)
+        return render_template('results.html', places=places)
+    return redirect(url_for('home'))
 
 
 if __name__ == "__main__":
