@@ -38,5 +38,27 @@ margin: 4px;
   color: #8B0000;
 }
 
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-primary {
+  background-color: #7d3b3b !important;
+  border-color: #7d3b3b !important;
+  color: pink !important;
+}
+
+.btn-primary:hover, .btn-primary:active {
+  background-color: #702f2f !important;
+  border-color: #702f2f !important;
+  color: lightblue !important;
+}
+
+a {color: pink !important;}
+a:hover {color: lightblue !important;}
+
+
 
 

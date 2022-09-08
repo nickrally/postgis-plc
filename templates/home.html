@@ -1,9 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  {% include 'search.html' %}
-  <a class="btn btn-primary search-btn" href="/add"> Add Place</a>
-  <hr>
+<div class="row justify-content-center">
+  <div class="col-auto">
   <table class="table table-bordered table-dark table-striped table-responsive">
     <thead class="thead-light">
       <tr>
@@ -30,5 +29,9 @@
       {% endfor %} 
     </tbody>
   </table>
+  <hr/>
+  <a class="btn btn-primary" href="/add"> Add Place</a>
+  </div>
+  </div>
 {% endblock %}
 
