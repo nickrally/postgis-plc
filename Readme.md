@@ -1,9 +1,25 @@
 ## My first postGIS project: Flask app with postgresql backend
 
-Full CRUD (create, read, update, delete).
+<br />
+<br />
+
+A full CRUD Flask app (create, read, update, delete), PostgreSQL db with `postgis` extension.
+<br />
+<br />
 Currenty hosted on Heroku: https://plc-after-dinner.herokuapp.com/
+<br />
+<br />
 Search restaurants within whatever distnce (in meters) from PLC (Piece, Love & Chocolate shop on Pearl St in Boulder, CO)
-Heroku actually supports instlling postgis extension.
+
+<img src="./static/img/screenshot1.png " alt="table of places to eat" width="600">
+
+<br />
+<br />
+
+### `psql` notes saved for convenience:
+
+#### Heroku supports instlling postgis extension.
+
 From Heroku CLI:
 
 ```
@@ -17,9 +33,7 @@ plc-after-dinner::DATABASE=> CREATE EXTENSION postgis;
 CREATE EXTENSION
 ```
 
-![Alt text](/static/imag/screenshot1.png "screenshot")
-
-### Create a table in a database with postgis extension:
+#### Create a table in a database with postgis extension:
 
 ```buildoutcfg
 plc_test=# CREATE TABLE dessert_after_meal (
@@ -31,7 +45,7 @@ plc_test=# CREATE TABLE dessert_after_meal (
 );
 ```
 
-### Insert initial data
+#### Insert initial data
 
 ```
 plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zip)
@@ -47,7 +61,7 @@ plc_test=# INSERT INTO dessert_after_meal (name, street_address, city, state, zi
     VALUES ('Bartaco', '1048 Pearl St.', 'Boulder', 'CO', '80302');
 ```
 
-### Get latitude and longitude using Bing Maps Api with free apikey
+#### Get latitude and longitude using Bing Maps Api with free apikey
 
 ```buildoutcfg
 plc % python3
@@ -85,7 +99,7 @@ plc % python3
 40.017207 -105.28182
 ```
 
-### Alter table, add a column of type `GEOGRAPHY`
+#### Alter table, add a column of type `GEOGRAPHY`
 
 ```buildoutcfg
 plc_test=# ALTER TABLE dessert_after_meal ADD COLUMN geolocation GEOGRAPHY(POINT);
@@ -100,7 +114,7 @@ plc_test=# UPDATE dessert_after_meal SET geolocation = 'point(-105.279445 40.019
 plc_test=# UPDATE dessert_after_meal SET geolocation = 'point(-105.28182 40.017207)'  WHERE id=4;
 ```
 
-### Iterate over restaurant rows to calculate distance to the chocolate shop
+#### Iterate over restaurant rows to calculate distance to the chocolate shop
 
 ```buildoutcfg
 plc_test=# SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a JOIN dessert_after_meal AS plc ON a.id <> plc.id WHERE plc.name = 'Piece, Love, and Chocolate' ORDER BY distance;
@@ -114,7 +128,7 @@ plc_test=# SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distanc
 (3 rows)
 ```
 
-### Find a restaurant within 500 meters (546 yards) from the chocolate shop
+#### Find a restaurant within 500 meters (546 yards) from the chocolate shop
 
 ```buildoutcfg
 plc_test=# SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a JOIN dessert_after_meal AS plc ON a.id <> plc.id WHERE plc.name = 'Piece, Love, and Chocolate' AND ST_Distance(a.geolocation, plc.geolocation) < 500 ORDER BY distance;
