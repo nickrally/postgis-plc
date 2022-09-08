@@ -1,4 +1,23 @@
-## My first postGIS project: dessert after dinner
+## My first postGIS project: Flask app with postgresql backend
+
+Full CRUD (create, read, update, delete).
+Currenty hosted on Heroku: https://plc-after-dinner.herokuapp.com/
+Search restaurants within whatever distnce (in meters) from PLC (Piece, Love & Chocolate shop on Pearl St in Boulder, CO)
+Heroku actually supports instlling postgis extension.
+From Heroku CLI:
+
+```
+psql (13.2, server 14.4 (Ubuntu 14.4-1.pgdg20.04+1))
+WARNING: psql major version 13, server major version 14.
+         Some psql features might not work.
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
+Type "help" for help.
+
+plc-after-dinner::DATABASE=> CREATE EXTENSION postgis;
+CREATE EXTENSION
+```
+
+![Alt text](/static/imag/screenshot1.png "screenshot")
 
 ### Create a table in a database with postgis extension:
 
