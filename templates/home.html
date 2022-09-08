@@ -1,38 +1,40 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="row justify-content-center">
-  <div class="col-auto">
-    {% include 'search.html' %}
-  <table class="table table-bordered table-dark table-striped table-responsive">
-    <thead class="thead-light">
-      <tr>
-        <th>Name</th>
-        <th>Street Address</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Zip</th>
-        <th>Update</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for place in places %}
+<div class="content">
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      {% include 'search.html' %}
+    <table class="table table-bordered table-dark table-striped table-responsive">
+      <thead class="thead-light">
         <tr>
-         <td>{{place.name}}</td>
-         <td>{{place.street_address}}</td>
-         <td>{{place.city}}</td>
-         <td>{{place.state}}</td>
-         <td>{{place.zip}}</td>
-         <td><a href="edit/{{place.id}}">Update</a></td>
-         <td><a href="delete/{{place.id}}">Delete</a></td>
-      </tr>
-      {% endfor %} 
-    </tbody>
-  </table>
-  <hr/>
-  <a class="btn btn-primary" href="/add"> Add Place</a>
-  </div>
-  </div>
+          <th>Name</th>
+          <th>Street Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zip</th>
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for place in places %}
+          <tr>
+           <td>{{place.name}}</td>
+           <td>{{place.street_address}}</td>
+           <td>{{place.city}}</td>
+           <td>{{place.state}}</td>
+           <td>{{place.zip}}</td>
+           <td><a href="edit/{{place.id}}">Update</a></td>
+           <td><a href="delete/{{place.id}}">Delete</a></td>
+        </tr>
+        {% endfor %} 
+      </tbody>
+    </table>
+    <hr/>
+    <a class="btn btn-primary" href="/add"> Add Place</a>
+    </div>
+    </div>
+</div>
 {% endblock %}
 
