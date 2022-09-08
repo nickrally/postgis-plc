@@ -1,3 +1,7 @@
+body{
+  background-color: #343a40;
+}
+
 form {
   margin: 10px;
 }
@@ -33,4 +37,6 @@ margin: 4px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: #8B0000;
 }
+
+
 
