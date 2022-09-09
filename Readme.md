@@ -9,12 +9,17 @@ A full CRUD Flask app (create, read, update, delete), PostgreSQL db with `postgi
 Currenty hosted on Heroku: https://plc-after-dinner.herokuapp.com/
 <br />
 <br />
-Search restaurants within whatever distnce (in meters) from PLC (Piece, Love & Chocolate shop on Pearl St in Boulder, CO)
+Search restaurants within whatever distnce from PLC (Piece, Love & Chocolate shop on Pearl St in Boulder, CO)
 
 <img src="./static/img/screenshot1.png " alt="table of places to eat" width="600">
 
 <br />
 <br />
+
+### ToDo List
+
+1. Dropdown for States
+2. Validate zip
 
 ### `psql` notes saved for convenience:
 
