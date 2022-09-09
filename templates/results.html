@@ -13,7 +13,7 @@
             {% for place in places %}
               <tr>
                 <td style="width: 20%">{{place.name}}</td>
-                <td style="width: 20%">{{"%.2f" % place.distance}}</td>
+                <td style="width: 20%">{{"%.2f" % (place.distance * meter2mile)}}</td>
               </tr>
             {% endfor %}
           </table>

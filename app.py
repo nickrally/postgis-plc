@@ -1,7 +1,7 @@
 import os
 import logging
 from flask import Flask, request, render_template, redirect, url_for
-from wtforms import Form, StringField,  Field, validators
+from wtforms import Form, StringField, FloatField, Field, validators
 from wtforms.validators import InputRequired, Length
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
@@ -20,6 +20,7 @@ app.secret_key = 'dessertafterdinner'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'].replace(
     "://", "ql://", 1)
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
 
@@ -39,7 +40,8 @@ class PlaceForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    distance = StringField('max_distance')
+    distance = StringField('max_distance', validators=[
+        InputRequired()])
 
 
 class Place(db.Model):
@@ -65,7 +67,7 @@ class Place(db.Model):
 
 @app.route('/', endpoint='home', methods=['GET', 'POST'])
 def index():
-    places = Place.query.order_by(Place.id.desc())
+    places = Place.query.order_by(Place.id.asc())
     return render_template('home.html', places=places)
 
 
@@ -124,17 +126,22 @@ def delete(id):
 
 @app.route('/search')
 def search():
-    max_distance = request.args.get('maxDistance')
-    app.logger.info("MAX_DISTANCE %s" % max_distance)
+    MILE2METER = 1609.34
+    METER2MILE = 0.000621369647819236
+    try:
+        max_distance = float(request.args.get('maxDistance'))
+    except:
+        max_distance = None
+    app.logger.info("MAX_DISTANCE %s , type(max_distance) is %s" %
+                    (max_distance, type(max_distance)))
     if (max_distance):
         sql = "SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a \
         JOIN dessert_after_meal AS plc ON a.id <> plc.id \
-        WHERE plc.name = 'Piece, Love, and Chocolate' \
-        AND ST_Distance(a.geolocation, plc.geolocation) < %s ORDER BY distance;" % max_distance
+        WHERE plc.id = 1 AND ST_Distance(a.geolocation, plc.geolocation) < %s ORDER BY distance;" % (max_distance * MILE2METER)
         result = db.session.execute(sql)
         places = [row for row in result]
         app.logger.info("PLACES %s" % places)
-        return render_template('results.html', places=places)
+        return render_template('results.html', places=places, meter2mile=METER2MILE)
     return redirect(url_for('home'))
 
 
