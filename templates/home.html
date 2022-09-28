@@ -26,11 +26,7 @@
            <td>{{place.state}}</td>
            <td>{{place.zip}}</td>
            <td><a href="edit/{{place.id}}">Update</a></td>
-           {% if place.id > 1 %}
            <td><a href="delete/{{place.id}}">Delete</a></td>
-           {% else %}
-           <td>Can't do!</a></td>
-           {% endif %}
         </tr>
         {% endfor %} 
       </tbody>
