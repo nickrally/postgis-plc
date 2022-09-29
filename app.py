@@ -137,7 +137,7 @@ def search():
     if (max_distance):
         sql = "SELECT a.name, ST_Distance(a.geolocation, plc.geolocation) as distance FROM dessert_after_meal AS a \
         JOIN dessert_after_meal AS plc ON a.id <> plc.id \
-        WHERE plc.id = 1 AND ST_Distance(a.geolocation, plc.geolocation) < %s ORDER BY distance;" % (max_distance * MILE2METER)
+        WHERE plc.name = 'Piece, Love & Chocolate' AND ST_Distance(a.geolocation, plc.geolocation) < %s ORDER BY distance;" % (max_distance * MILE2METER)
         result = db.session.execute(sql)
         places = [row for row in result]
         app.logger.info("PLACES %s" % places)
