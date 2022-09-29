@@ -25,7 +25,11 @@
            <td>{{place.city}}</td>
            <td>{{place.state}}</td>
            <td>{{place.zip}}</td>
-           <td><a href="edit/{{place.id}}">Update</a></td>
+           {% if place.name != 'Piece, Love & Chocolate' %}
+             <td><a href="edit/{{place.id}}">Update</a></td>
+            {% else %}
+             <td>Can't do!</a></td>
+            {% endif %}
            {% if place.name != 'Piece, Love & Chocolate' %}
              <td><a href="delete/{{place.id}}">Delete</a></td>
             {% else %}
