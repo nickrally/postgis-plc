@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-8 blog-main">
                 <form method="POST" action="">
-                    {% if place.name != 'Piece, Love & Chocolate' %}
+                    {% if form.name != 'Piece, Love & Chocolate' %}
                       {{ form.name.label }} {{ form.name(size=250, class_="form-control") }} <br/>      
                     {% endif %}
                     {{ form.name.label }} {{ form.name(size=250, class_="form-control") }} <br/>
